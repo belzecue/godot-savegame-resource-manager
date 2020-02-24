@@ -2,6 +2,7 @@ extends Node
 
 
 
+var async_loader : ResourceAsyncLoader = ResourceAsyncLoader.new()
 #----------------------SHOWCASE-------------------------------------------------
 #func _ready() -> void:
 #	print("-------------------LOAD SINGLE RESOURCE-------------------")
@@ -112,6 +113,100 @@ func pCheckDirectoryPath(path : String, dir : Directory) -> String:
 
 
 
+func _ready() -> void:
+	async_loader.connect("Loading_Finished", self, "On_Loading_Finished")
+	async_loader.connect("Poll_Update", self, "On_Poll_Update")
+
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("ui_accept"):
+		async_loader.startLoading("res://level/TestScene_InteractiveLoader.tscn")
+
+func On_Loading_Finished(resource) -> void:
+	print("Finished. Resource loaded: " + str(resource))
+#	async_loader.disconnect("Loading_Finished", self, "On_Loading_Finished")
+#	async_loader.disconnect("Poll_Update", self, "On_Poll_Update")
+#	async_loader = ResourceAsyncLoader.new()
+#	async_loader.connect("Loading_Finished", self, "On_Loading_Finished")
+#	async_loader.connect("Poll_Update", self, "On_Poll_Update")
+
+func On_Poll_Update(p : float) -> void:
+	print("Poll Update: " + str(p))
+
+
+
+
+class ResourceAsyncLoader:
+	signal Loading_Finished(resource)
+	signal Poll_Update(percentage)
+	
+	
+	
+	
+	enum LOAD_STATE {FAILED = -1, STARTED = 0, LOADING = 1, CACHED = 2}
+	
+	
+	var thread : Thread
+	var interactive_loader : ResourceInteractiveLoader
+	var res = null
+	
+	
+	
+	
+	func getResource():
+		return res
+
+	
+	func startLoading(path : String) -> int:
+		if !ResourceLoader.exists(path):
+			print("Async load of failed. %s does not exist." %path)
+			return LOAD_STATE.FAILED
+		if res:
+			emit_signal("Loading_Finished", res)
+			return LOAD_STATE.CACHED
+		if ResourceLoader.has_cached(path):
+			print("IS ALREAD CACHED")
+			res = ResourceLoader.load(path)
+			emit_signal("Loading_Finished", res)
+			return LOAD_STATE.CACHED
+
+		if thread and thread.is_active():
+			return LOAD_STATE.LOADING
+		
+		thread = Thread.new()
+		interactive_loader = ResourceLoader.load_interactive(path)
+		thread.start(self,"threadLoading", 0)
+		return LOAD_STATE.STARTED
+	
+	
+	func threadLoading(thread_id):
+		while (true):
+			print("P")
+			var err = interactive_loader.poll()
+			if err == OK:
+				var p : float = interactive_loader.get_stage() as float / interactive_loader.get_stage_count() as float
+				emit_signal("Poll_Update", p)
+			elif(err == ERR_FILE_EOF):
+				res = interactive_loader.get_resource()
+				break
+			else:
+				break
+		
+		call_deferred("loadingFinished")
+		thread.wait_to_finish()
+	
+	
+	func loadingFinished() -> void:
+		thread = null
+		interactive_loader = null
+		emit_signal("Loading_Finished", res)
+	
+	
+	func _notification(what: int) -> void:
+		if what == 1:
+			if interactive_loader:
+				interactive_loader = null
+			if thread and thread.is_active():
+				thread.wait_to_finish()
 
 
 
@@ -125,39 +220,3 @@ func pCheckDirectoryPath(path : String, dir : Directory) -> String:
 
 
 
-
-
-
-
-
-
-
-
-#func dir_contents(path):
-#    var dir = Directory.new()
-#    if dir.open(path) == OK:
-#        dir.list_dir_begin()
-#        var file_name = dir.get_next()
-#        while file_name != "":
-#            if dir.current_is_dir():
-#                print("Found directory: " + file_name)
-#            else:
-#                print("Found file: " + file_name)
-#            file_name = dir.get_next()
-#    else:
-#        print("An error occurred when trying to access the path.")
-
-#func loadAllResourcesFromDirectory(path : String, template : String) -> Array:
-#	var save_path : String = ""
-#	var file : File = File.new()
-#	var resources : Array = []
-#	var index : int = 0
-#	while true:
-#		save_path = path.plus_file(template % index)
-#		if file.file_exists(save_path):
-#			var l = ResourceLoader.load(save_path)
-#			resources.append(l)
-#		else:
-#			break
-#		index += 1
-#	return resources
