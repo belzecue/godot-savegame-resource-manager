@@ -8,15 +8,31 @@
 
 config_version=4
 
-_global_script_classes=[  ]
+_global_script_classes=[ {
+"base": "Reference",
+"class": "SaveGame",
+"language": "GDScript",
+"path": "res://savegame/SaveGame.gd"
+}, {
+"base": "Resource",
+"class": "TestSaveGame",
+"language": "GDScript",
+"path": "res://savegame/TestSaveGame.gd"
+} ]
 _global_script_class_icons={
-
+"SaveGame": "",
+"TestSaveGame": ""
 }
 
 [application]
 
 config/name="SaveGameManager"
+run/main_scene="res://level/Level.tscn"
 config/icon="res://icon.png"
+
+[autoload]
+
+SaveGameManager="*res://autoload/SaveGameManager.gd"
 
 [rendering]
 
