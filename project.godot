@@ -29,10 +29,12 @@ _global_script_class_icons={
 config/name="SaveGameManager"
 run/main_scene="res://level/Level.tscn"
 config/icon="res://icon.png"
+config/version="0.0.1a"
 
 [autoload]
 
 SaveGameManager="*res://autoload/SaveGameManager.gd"
+ResourceManager="*res://autoload/ResourceManager.gd"
 
 [rendering]
 

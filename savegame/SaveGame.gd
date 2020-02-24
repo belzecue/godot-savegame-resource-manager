@@ -65,7 +65,7 @@ func getSaveGameProfile() -> String:
 	return save_game_profile
 
 func resetSaveGameProfile() -> void:
-	setSaveGameProfile("DefaultProfile")
+	setSaveGameProfile("default-profile")
 
 
 
