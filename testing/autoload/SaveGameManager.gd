@@ -3,7 +3,7 @@ extends Node
 #-------------------------------------------------------------------------------
 #|:::::::::::::::::::::::::::::::::SHOWCASE::::::::::::::::::::::::::::::::::::|
 #-------------------------------------------------------------------------------
-#const TEST_SAVE_GAME = preload("res://savegame/TestSaveGame.gd")
+#const TEST_SAVE_GAME = preload("res://testing/TestSaveGame.gd")
 #onready var default_savegame : SaveGame = SaveGame.new(TEST_SAVE_GAME)
 #onready var player_savegame_01 : SaveGame = SaveGame.new(TEST_SAVE_GAME, "profile-base", "player")
 #onready var player_savegame_02 : SaveGame = SaveGame.new(TEST_SAVE_GAME, "profile-advanced", "player")

@@ -12,32 +12,32 @@ _global_script_classes=[ {
 "base": "Reference",
 "class": "DirectoryLoaderAsync",
 "language": "GDScript",
-"path": "res://resource-loader/DirectoryLoaderAsync.gd"
+"path": "res://final-scripts/resource-loader/DirectoryLoaderAsync.gd"
 }, {
 "base": "Reference",
 "class": "DirectoryLoaderStatic",
 "language": "GDScript",
-"path": "res://resource-loader/DirectoryLoaderStatic.gd"
+"path": "res://final-scripts/resource-loader/DirectoryLoaderStatic.gd"
 }, {
 "base": "Reference",
 "class": "ResourceLoaderAsync",
 "language": "GDScript",
-"path": "res://resource-loader/ResourceLoaderAsync.gd"
+"path": "res://final-scripts/resource-loader/ResourceLoaderAsync.gd"
 }, {
 "base": "Reference",
 "class": "SaveGame",
 "language": "GDScript",
-"path": "res://savegame/SaveGame.gd"
+"path": "res://final-scripts/savegame/SaveGame.gd"
 }, {
 "base": "Reference",
 "class": "SaveGameLoader",
 "language": "GDScript",
-"path": "res://savegame/SaveGameLoader.gd"
+"path": "res://final-scripts/savegame/SaveGameLoader.gd"
 }, {
 "base": "Resource",
 "class": "TestSaveGame",
 "language": "GDScript",
-"path": "res://savegame/TestSaveGame.gd"
+"path": "res://testing/TestSaveGame.gd"
 } ]
 _global_script_class_icons={
 "DirectoryLoaderAsync": "",
@@ -51,14 +51,14 @@ _global_script_class_icons={
 [application]
 
 config/name="SaveGameManager"
-run/main_scene="res://level/Level.tscn"
+run/main_scene="res://testing/level/Level.tscn"
 config/icon="res://icon.png"
 config/version="0.0.1a"
 
 [autoload]
 
-SaveGameManager="*res://autoload/SaveGameManager.gd"
-ResourceManager="*res://autoload/ResourceManager.gd"
+SaveGameManager="*res://testing/autoload/SaveGameManager.gd"
+ResourceManager="*res://testing/autoload/ResourceManager.gd"
 
 [rendering]
 
