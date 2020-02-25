@@ -12,6 +12,7 @@ var _finished_state : int = FINISHED_STATE.LOADING
 
 
 
+
 func _init(path : String, func_ref : FuncRef) -> void:
 	if !func_ref.is_valid(): 
 		print("Function reference not valid! Either object with function is invalid or object does not have specified function.")
@@ -29,8 +30,8 @@ func _init(path : String, func_ref : FuncRef) -> void:
 		if func_ref.is_valid():
 			var res = ResourceLoader.load(path)
 			func_ref.call_func(1.0, res)
-		print("Resource was already cached, no loading needed. Make sure to only load a resource async once.")
-		push_warning("Resource was already cached, no loading needed. Make sure to only load a resource async once.")
+		print("Resource was already cached, no loading needed. Make sure to only load a resource async once. Use normal ResourceLoader.load() if resource is already cached.")
+		push_warning("Resource was already cached, no loading needed. Make sure to only load a resource async once. Use normal ResourceLoader.load() if resource is already cached.")
 		_finished_state = FINISHED_STATE.FINISHED_CACHED
 		return
 
@@ -51,6 +52,8 @@ func pThreadLoading(func_ref):
 			res = _interactive_loader.get_resource()
 			break
 		else:
+			print("Thread canceled. Loading was not successful.")
+			push_warning("Thread canceled. Loading was not successful.")
 			break
 	
 	call_deferred("pLoadingFinished", res, func_ref)

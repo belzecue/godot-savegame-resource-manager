@@ -8,25 +8,29 @@ var rla : ResourceLoaderAsync
 var dla : DirectoryLoaderAsync
 
 
+var array : Array = []
+
+
+
 
 
 func _input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_accept"):
-		#var c = ResourceLoader.load("res://test-resources/a/Curve_Test_01.tres", "Curve")
-		#var curve = DirectoryLoader.loadFrom("res://test-resources/a/Curve_Test_01.tres", "Curve")
-		#var curves : Array = DirectoryLoader.loadAllFrom("res://test-resources", "Curve", true)
-		#print("Loaded: " + str(curves))
-		#loadResourceAsync()
+		#var c = ResourceLoader.load("res://test-resources/a/Curve_Test_01.tres", "")
+		#var curve = DirectoryLoaderStatic.loadFrom("res://test-resources/a/Curve_Test_01.tres", "")
+#		array += DirectoryLoaderStatic.loadAllFrom("res://test-resources", "", true)
+#		print("Loaded: " + str(array))
+#		loadResourceAsync()
 		loadResourcesAsync()
 
 
 
 
 func loadResourcesAsync() -> void:
-	dla = DirectoryLoader.asyncLoadAllFrom("res://test-resources", self, "asyncLoadAllStateChange", "Curve", true)
+	dla = DirectoryLoaderStatic.asyncLoadAllFrom("res://test-resources", self, "asyncLoadAllStateChange", "", true)
 
 func loadResourceAsync() -> void:
-	rla = DirectoryLoader.asyncLoadFrom("res://level/TestScene_InteractiveLoader.tscn", self, "asyncLoadStateChange")
+	rla = DirectoryLoaderStatic.asyncLoadFrom("res://level/TestScene_InteractiveLoader.tscn", self, "asyncLoadStateChange")
 
 
 

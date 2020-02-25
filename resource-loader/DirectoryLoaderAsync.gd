@@ -27,6 +27,9 @@ func _init(path : String, func_ref : FuncRef, type_hint : String = "", deep : bo
 		_thread = Thread.new()
 		_thread.start(self,"pThreadLoading", func_ref)
 		_finished_state = FINISHED_STATE.LOADING
+	else:
+		print("No files to load were found. Thread is not starting.")
+		push_warning("No files to load were found. Thread is not starting.")
 
 
 func pGetAllFileNames(path : String, deep : bool = false) -> Array:
@@ -66,6 +69,11 @@ func pThreadLoading(func_ref):
 		if func_ref.is_valid():
 			var p : float = count_cur as float / count_max as float
 			func_ref.call_func(p, [])
+	
+	if resources.size() != count_max:
+		print("Not all resources were loaded.")
+		push_warning("Not all resources were loaded.")
+	
 	call_deferred("pLoadingFinished", resources, func_ref)
 	_thread.wait_to_finish()
 
