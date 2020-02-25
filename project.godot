@@ -14,6 +14,11 @@ _global_script_classes=[ {
 "language": "GDScript",
 "path": "res://savegame/SaveGame.gd"
 }, {
+"base": "Reference",
+"class": "SaveGameLoader",
+"language": "GDScript",
+"path": "res://savegame/SaveGameLoader.gd"
+}, {
 "base": "Resource",
 "class": "TestSaveGame",
 "language": "GDScript",
@@ -21,6 +26,7 @@ _global_script_classes=[ {
 } ]
 _global_script_class_icons={
 "SaveGame": "",
+"SaveGameLoader": "",
 "TestSaveGame": ""
 }
 
