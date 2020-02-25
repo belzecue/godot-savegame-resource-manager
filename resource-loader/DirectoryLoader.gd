@@ -3,18 +3,17 @@ class_name DirectoryLoader
 
 
 
-static func loadFrom(file_path : String) -> Resource:
-	var r : Resource = null
-	print("file: "+ str(file_path.get_file()))
+static func loadFrom(file_path : String, type_hint : String = "") -> Resource:
 	if ResourceLoader.exists(file_path):
-		r = ResourceLoader.load(file_path)
+		print(ResourceLoader.has_cached(file_path))
+		return ResourceLoader.load(file_path, type_hint)
 	else:
 		push_warning("Resource at %s does not exist. Return value is null." % file_path)
 		print("Resource at %s does not exist. Return value is null." % file_path)
-	return r
+		return null
 
 
-static func loadAllDeepFrom(directory_path : String) -> Array:
+static func loadAllFrom(directory_path : String, type_hint : String = "", deep : bool = false) -> Array:
 	var dir : Directory = Directory.new()
 	directory_path = pCheckDirectoryPath(directory_path, dir)
 	if directory_path == "": return []
@@ -26,11 +25,13 @@ static func loadAllDeepFrom(directory_path : String) -> Array:
 		while file_name != "":
 			if !dir.current_is_dir():
 				var file : String = directory_path.plus_file(file_name)
-				if ResourceLoader.exists(file):
-					resources.append(ResourceLoader.load(file))
+				var r = loadFrom(file, type_hint)
+				if r:
+					resources.append(r)
 			else:
-				var directory : String = directory_path.plus_file(file_name)
-				resources += loadAllDeepFrom(directory)
+				if deep:
+					var directory : String = directory_path.plus_file(file_name)
+					resources += loadAllFrom(directory, type_hint, deep)
 			file_name = dir.get_next()
 	else:
 		push_warning("Resources could not be loaded from %s. Did you mean %s ?" %[directory_path, directory_path.get_base_dir()])
@@ -40,29 +41,20 @@ static func loadAllDeepFrom(directory_path : String) -> Array:
 	return resources
 
 
-static func loadAllFrom(directory_path : String) -> Array:
-	var dir : Directory = Directory.new()
-	directory_path = pCheckDirectoryPath(directory_path, dir)
-	if directory_path == "": return []
-		
-	var resources : Array = []
-	if dir.open(directory_path) == OK:
-		dir.list_dir_begin()
-		var file_name : String = dir.get_next()
-		while file_name != "":
-			if !dir.current_is_dir():
-				var file = directory_path.plus_file(file_name)
-				if ResourceLoader.exists(file):
-					resources.append(ResourceLoader.load(file))
-			file_name = dir.get_next()
-	else:
-		push_warning("Resources could not be loaded from %s. Did you mean %s ?" %[directory_path, directory_path.get_base_dir()])
-		print("Resources could not be loaded from %s. Did you mean %s ?" % [directory_path, directory_path.get_base_dir()])
-	
-	dir.list_dir_end()
-	return resources
+static func asyncLoadFrom(file_path : String, object, function_name : String) -> ResourceLoaderAsync:
+	var func_ref : FuncRef = FuncRef.new()
+	func_ref.set_instance(object)
+	func_ref.set_function(function_name)
+	var rla : ResourceLoaderAsync = ResourceLoaderAsync.new(file_path, func_ref)
+	return rla
 
 
+static func asyncLoadAllFrom(file_path : String, object, function_name : String, type_hint : String = "", deep : bool = false) -> DirectoryLoaderAsync:
+	var func_ref : FuncRef = FuncRef.new()
+	func_ref.set_instance(object)
+	func_ref.set_function(function_name)
+	var dla : DirectoryLoaderAsync = DirectoryLoaderAsync.new(file_path, func_ref, type_hint, deep)
+	return dla
 
 
 static func pCheckDirectoryPath(path : String, dir : Directory) -> String:
@@ -88,24 +80,3 @@ static func pCheckDirectoryPath(path : String, dir : Directory) -> String:
 			return_path = path
 	
 	return return_path
-
-
-
-
-
-static func loadAsyncFrom(file_path : String, object, function_name : String) -> ResourceLoaderAsync:
-	var func_ref : FuncRef = FuncRef.new()
-	func_ref.set_instance(object)
-	func_ref.set_function(function_name)
-	var rla : ResourceLoaderAsync = ResourceLoaderAsync.new(file_path, func_ref)
-	return rla
-
-
-
-#-----------------------------IS NOT WORKING------------------------------------
-#thread.start(DirectoryLoader) probably creates a cyclic reference 
-
-#static func loadAsyncAllDeepFrom(directory_path : String, finished_func : FuncRef) -> void:
-#	var thread : Thread = Thread.new()
-#	thread.start(DirectoryLoader, "loadAllDeepFrom", directory_path)
-#	finished_func.call_func(thread.wait_to_finish())

@@ -15,6 +15,11 @@ _global_script_classes=[ {
 "path": "res://resource-loader/DirectoryLoader.gd"
 }, {
 "base": "Reference",
+"class": "DirectoryLoaderAsync",
+"language": "GDScript",
+"path": "res://resource-loader/DirectoryLoaderAsync.gd"
+}, {
+"base": "Reference",
 "class": "ResourceLoaderAsync",
 "language": "GDScript",
 "path": "res://resource-loader/ResourceLoaderAsync.gd"
@@ -36,6 +41,7 @@ _global_script_classes=[ {
 } ]
 _global_script_class_icons={
 "DirectoryLoader": "",
+"DirectoryLoaderAsync": "",
 "ResourceLoaderAsync": "",
 "SaveGame": "",
 "SaveGameLoader": "",

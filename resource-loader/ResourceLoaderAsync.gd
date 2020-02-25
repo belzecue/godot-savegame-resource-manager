@@ -3,7 +3,7 @@ class_name ResourceLoaderAsync
 
 
 
-enum FINISHED_STATE {FUNREF_INVALID = 0, PATH_INVALID = 1, FINISHED_CACHED = 2, FINISHED_LOADED = 3, LOADING = 4}
+enum FINISHED_STATE {FUNREF_INVALID = 0, PATH_INVALID = 1, FINISHED_CACHED = 2, FINISHED_LOADING = 3, LOADING = 4}
 
 
 var _thread : Thread
@@ -65,7 +65,7 @@ func pLoadingFinished(res, func_ref) -> void:
 	else:
 		print("Resource was sucessfully loaded but reference to function was invalid.")
 		push_warning("Resource was sucessfully loaded but reference to function was invalid.")
-	_finished_state = FINISHED_STATE.FINISHED_LOADED
+	_finished_state = FINISHED_STATE.FINISHED_LOADING
 
 
 func getFinishedState() -> int:
