@@ -10,6 +10,16 @@ config_version=4
 
 _global_script_classes=[ {
 "base": "Reference",
+"class": "DirectoryLoader",
+"language": "GDScript",
+"path": "res://resource-loader/DirectoryLoader.gd"
+}, {
+"base": "Reference",
+"class": "ResourceLoaderAsync",
+"language": "GDScript",
+"path": "res://resource-loader/ResourceLoaderAsync.gd"
+}, {
+"base": "Reference",
 "class": "SaveGame",
 "language": "GDScript",
 "path": "res://savegame/SaveGame.gd"
@@ -25,6 +35,8 @@ _global_script_classes=[ {
 "path": "res://savegame/TestSaveGame.gd"
 } ]
 _global_script_class_icons={
+"DirectoryLoader": "",
+"ResourceLoaderAsync": "",
 "SaveGame": "",
 "SaveGameLoader": "",
 "TestSaveGame": ""
