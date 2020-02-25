@@ -50,7 +50,7 @@ _global_script_class_icons={
 
 [application]
 
-config/name="SaveGameManager"
+config/name="SaveGameResourceManager"
 run/main_scene="res://testing/level/Level.tscn"
 config/icon="res://icon.png"
 config/version="0.0.1a"
